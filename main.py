@@ -27,6 +27,23 @@ endpoint = (
     else "https://api.amadeus.com/v2/shopping/flight-offers"
 )
 
+# Update the locations & dates you are interested 
+FIRST_AND_LAST_FLIGHT_LOCATIONS = ["CNX", "NGO", "HKG", "OKA", "DAD", "BKK", "PEN", "CTS", "HAN", "SDJ", "HKD", "SGN"]
+FISRT_FLIGHT_DATES = ["2025-04-05", "2025-04-06"]
+LAST_FLIGH_DATES = ["2025-10-02", "2025-10-03", "2025-10-08", "2025-10-09"]
+SECOND_FLIGHT = {
+                "id": "2",
+                "originLocationCode": "TPE",
+                "destinationLocationCode": "YVR",
+                "departureDateTimeRange": {"date": "2025-07-04"},
+            }
+THIRD_FLIGHT = {
+                "id": "3",
+                "originLocationCode": "YVR",
+                "destinationLocationCode": "TPE",
+                "departureDateTimeRange": {"date": "2025-07-19"},
+            },
+
 # SGN: 胡志明市國際機場
 # TPE: 台北桃園國際機場
 # YVR: 溫哥華國際機場
@@ -35,6 +52,7 @@ endpoint = (
 # CI: 中華航空
 # BR: 長榮航空
 # JX: 星宇航空
+
 def search(first_location, first_date, last_location, last_date):
     payload = {
         "currencyCode": "TWD",
@@ -47,19 +65,9 @@ def search(first_location, first_date, last_location, last_date):
                 "departureDateTimeRange": {"date": first_date},
             },
             
-            # assume the middle 2 flights are fixed
-            {
-                "id": "2",
-                "originLocationCode": "TPE",
-                "destinationLocationCode": "YVR",
-                "departureDateTimeRange": {"date": "2025-07-04"},
-            },
-            {
-                "id": "3",
-                "originLocationCode": "YVR",
-                "destinationLocationCode": "TPE",
-                "departureDateTimeRange": {"date": "2025-07-19"},
-            },
+            # assume 2nd & 3rd flights are fixed
+            SECOND_FLIGHT,
+            THIRD_FLIGHT,
             
             {
                 "id": "4",
@@ -96,12 +104,10 @@ def search(first_location, first_date, last_location, last_date):
     data = res.json()
     return data
 
-# Update the locations & dates you are interested 
-ALL_locations = ["CNX", "NGO", "HKG", "OKA", "DAD", "BKK", "PEN", "CTS", "HAN", "SDJ", "HKD", "SGN"]
-for start_loc in ALL_locations:
-    for start_date in ["2025-04-05", "2025-04-06"]:
-        for end_loc in ALL_locations:
-            for end_date in ["2025-10-02", "2025-10-03", "2025-10-08", "2025-10-09"]:
+for start_loc in FIRST_AND_LAST_FLIGHT_LOCATIONS:
+    for start_date in FISRT_FLIGHT_DATES:
+        for end_loc in FIRST_AND_LAST_FLIGHT_LOCATIONS:
+            for end_date in LAST_FLIGH_DATES:
                 file_prefix = f"{folder}/{start_loc}_{start_date}_{end_loc}_{end_date}"
                 if Path(f"{file_prefix}_raw.json").exists():
                     print(f"Skip {start_loc}_{start_date}_{end_loc}_{end_date} because cached")
