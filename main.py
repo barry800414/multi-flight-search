@@ -12,7 +12,7 @@ How to use it:
    (need credict card & sign contract, but there is free quota)
 """
 
-is_test = False
+is_test = True
 folder = "./test" if is_test else "./prod"
 
 # Get access token from https://developers.amadeus.com/
@@ -28,21 +28,21 @@ endpoint = (
 )
 
 # Update the locations & dates you are interested 
-FIRST_AND_LAST_FLIGHT_LOCATIONS = ["CNX", "NGO", "HKG", "OKA", "DAD", "BKK", "PEN", "CTS", "HAN", "SDJ", "HKD", "SGN"]
-FISRT_FLIGHT_DATES = ["2025-04-05", "2025-04-06"]
-LAST_FLIGH_DATES = ["2025-10-02", "2025-10-03", "2025-10-08", "2025-10-09"]
+FIRST_AND_LAST_FLIGHT_LOCATIONS = ["KIX", "NRT"]
+FISRT_FLIGHT_DATES = ["2026-05-04"]
+LAST_FLIGH_DATES = ["2026-10-21"]
 SECOND_FLIGHT = {
                 "id": "2",
                 "originLocationCode": "TPE",
-                "destinationLocationCode": "YVR",
-                "departureDateTimeRange": {"date": "2025-07-04"},
+                "destinationLocationCode": "AKL",
+                "departureDateTimeRange": {"date": "2026-09-23"},
             }
 THIRD_FLIGHT = {
                 "id": "3",
-                "originLocationCode": "YVR",
+                "originLocationCode": "AKL",
                 "destinationLocationCode": "TPE",
-                "departureDateTimeRange": {"date": "2025-07-19"},
-            },
+                "departureDateTimeRange": {"date": "2026-10-08"},
+            }
 
 # SGN: 胡志明市國際機場
 # TPE: 台北桃園國際機場
@@ -100,6 +100,7 @@ def search(first_location, first_date, last_location, last_date):
     res = requests.post(
         endpoint, headers={"Authorization": f"Bearer {token}"}, json=payload
     )
+    print(res.text)
     res.raise_for_status()
     data = res.json()
     return data
